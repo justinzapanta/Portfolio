@@ -145,6 +145,7 @@
     <div class="w-full mt-28">
         <h1 id="works" class="font-bold font-oswald text-3xl">My Works</h1>
 
+        <!--work 1-->
         <div class="w-full grid grid-cols-[2fr_1fr] mb-32 mt-10" data-aos="fade-right" data-aos-duration="750" data-aos-once="true">
             <img src="{% static 'img/zappy.png' %}" class="rounded-2xl w-[46rem] border" alt="">
             
@@ -160,7 +161,7 @@
             </div>
         </div>
 
-
+        <!--Work 2-->
         <div class="w-full grid grid-cols-[1fr_2fr] mb-32" data-aos="fade-left" data-aos-duration="750" data-aos-once="true">     
             <div class="w-full font-roboto mr-10 h-full flex-col flex justify-center" >
                 <h1 class="font-bold text-xl text-sky-500">Basa Well</h1>
@@ -178,70 +179,92 @@
             </div>
 
         </div>
+
+
+        <!--Work3-->
+        <div class="w-full grid grid-cols-[2fr_1fr] gap-x-5 mb-32 mt-10" data-aos="fade-right" data-aos-duration="750" data-aos-once="true">
+            <div class="h-96 w-full rounded-2xl border-l border-r border-b border-gray-300 flex flex-col relative">
+                <div class="w-full flex">
+                    <!--Dropdown-->
+                    <div onclick="dropdown(this)" class="h-9 hover:bg-gray-50 rounded-tl-2xl flex-1 border border-gray-300 hover:cursor-pointer justify-center flex flex-col px-4">
+                        <div class="flex font-roboto">
+                            <h1 id="display_method" class="text-emerald-600 text-sm mt-1 font-bold">GET:</h1>
+                            <h1 id="display_url" class="flex-1 text-sm mt-1 ml-3">/api/ticket</h1>
+                            <div id="down_icon">
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </div>
+
+                            <div id="up_icon" class="hidden">
+                                <i class="fas fa-chevron-up text-sm hidden"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <button onclick="send_request()" class="h-9 px-10 rounded-t-2xl bg-sky-500 hover:bg-sky-600 font-bold font-roboto text-white border-t border-b rounded-tl-none border-gray-300">Send</button>
+                </div>
+
+                <div class="h-full w-full relative">
+                    <!--Options-->
+                    <div id="url_dropdown" class="hidden z-20 w-full overflow-y-auto h-52 px-2 py-2 bg-white  shadow-lg border space-y-1 rounded-b-xl absolute top-0">
+                        <div onclick="selected(this)" index="0" class="w-full flex bg-gray-200 py-1.5 font-roboto hover:cursor-pointer px-3 rounded-md options">
+                            <h1 id="h1-0" class="text-emerald-600 text-sm font-bold">GET: </h1>
+                            <h1 id="h2-0" class="flex-1 ml-3 text-sm font-roboto">/api/ticket</h1>
+                        </div>
+
+                        <div onclick="selected(this)" index="1" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
+                            <h1 id="h1-1" class="text-emerald-600 text-sm font-bold">POST: </h1>
+                            <h1 id="h2-1" class="flex-1 ml-3 text-sm font-roboto">/api/ticket</h1>
+                        </div>
+
+                        <div onclick="selected(this)" index="2" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
+                            <h1 id="h1-2" class="text-emerald-600 text-sm font-bold">PUT: </h1>
+                            <h1 id="h2-2" class="flex-1 ml-3 text-sm font-roboto">/api/ticket/{id}</h1>
+                        </div>
+                    </div>
+
+                    <!--Menu-->
+                    <div class="font-roboto px-4 flex space-x-5 mt-2">
+                        <a onclick="show_params(this)" class="text-sm hover:cursor-pointer hover:underline hover:underline-offset-2">Params</a>
+                        <a class="text-sm hover:cursor-pointer hover:underline hover:underline-offset-2">Body</a>
+                    </div>
+
+                    <!--params body-->
+                        <div id="params_body" class="w-full h-full px-4 mt-2 font-roboto hidden">
+                            <h1 class="text-sm text-gray-500">Params Query</h1>
+                            <div class="h-[15.5rem] text-sm font-roboto focus:ring-0 focus:ring-gray-300 rounded-md w-full resize-none focus:border-none focus:ring-offset-0 p-3 border mt-1" ></div>
+                            
+                            <div  class="w-full px-1">
+                                <h1 onclick="show_response()" class="text-sm font-roboto hover:cursor-pointer mt-2 hover:underline hover:underline-offset-2">Response</h1>
+                            </div>
+                        </div>
+                    
+                    <!--response-->
+                    <div id="response_body" class="w-full h-full px-4 mt-2 font-roboto">
+                        <h1 class="text-sm text-gray-500">Response</h1>
+                        <textarea id="response_textrea" readonly class="h-[17.1rem] text-sm font-roboto focus:ring-0 focus:ring-gray-300 rounded-md w-full resize-none focus:border-none focus:ring-offset-0 p-3 border mt-1" ></textarea>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="w-full font-roboto ml-10 h-full flex-col flex justify-center" >
+                <h1 class="font-bold text-xl text-sky-500">Ticket API</h1>
+                <h1 class="mt-1 font-bold text-gray-500">Django Rest Framework</h1>
+
+                <div class="flex mt-4 font-roboto font-bold space-x-6">
+                    <a class="text-lg hover:cursor-pointer hover:underline hover:underline-offset-2"> <i class="fas fa-arrow-left"></i> Live Demo </a>
+                    <a href="https://github.com/justinzapanta/Portfolio" target="_blank" class="hover:underline hover:underline-offset-2 text-lg">Github <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
+
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init();
-
-
-        var TxtType = function(el, toRotate, period) {
-        this.toRotate = toRotate;
-        this.el = el;
-        this.loopNum = 0;
-        this.period = parseInt(period, 10) || 2000;
-        this.txt = '';
-        this.tick();
-        this.isDeleting = false;
-    };
-
-    TxtType.prototype.tick = function() {
-        var i = this.loopNum % this.toRotate.length;
-        var fullTxt = this.toRotate[i];
-
-        if (this.isDeleting) {
-        this.txt = fullTxt.substring(0, this.txt.length - 1);
-        } else {
-        this.txt = fullTxt.substring(0, this.txt.length + 1);
-        }
-
-        this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
-
-        var that = this;
-        var delta = 200 - Math.random() * 100;
-
-        if (this.isDeleting) { delta /= 2; }
-
-        if (!this.isDeleting && this.txt === fullTxt) {
-        delta = this.period;
-        this.isDeleting = true;
-        } else if (this.isDeleting && this.txt === '') {
-        this.isDeleting = false;
-        this.loopNum++;
-        delta = 500;
-        }
-
-        setTimeout(function() {
-        that.tick();
-        }, delta);
-    };
-
-    window.onload = function() {
-        var elements = document.getElementsByClassName('typewrite');
-        for (var i=0; i<elements.length; i++) {
-            var toRotate = elements[i].getAttribute('data-type');
-            var period = elements[i].getAttribute('data-period');
-            if (toRotate) {
-              new TxtType(elements[i], JSON.parse(toRotate), period);
-            }
-        }
-        // INJECT CSS
-        var css = document.createElement("style");
-        css.type = "text/css";
-        css.innerHTML = ".typewrite > .wrap { border-right: 0.2em solid #0ea5e9}";
-        document.body.appendChild(css);
-    };
-      </script>
+    <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>
 

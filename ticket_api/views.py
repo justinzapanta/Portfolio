@@ -52,7 +52,7 @@ def ticket(request):
 
         ticket = Ticket.objects.filter(filters)
         serialize = TicketSerializer(ticket, many=True)
-
+        
         return Response({"results" : serialize.data})
     
     elif request.method == 'POST':
@@ -67,6 +67,7 @@ def ticket(request):
                 first_agent = Agent.objects.filter(is_online = True)
                 
                 agent = Agent.objects.filter(total_ticket__lt = first_agent[0].total_ticket, is_online = True)
+                asign_ticket = ''
                 if agent:
                     selected_agent = agent[0]
                     selected_agent.total_ticket = selected_agent.total_ticket + 1
@@ -90,12 +91,19 @@ def ticket(request):
                         assigned_number = first_agent.total_ticket
                     )
                     asign_ticket.save()
-                    
+                
+                modify_data = new_ticket.data
+                modify_data['is_assigned_to_agent'] = {
+                    'agent_id' : asign_ticket.assigned_to.agent_fullName,
+                    'agent_email' : asign_ticket.assigned_to.agent_email,
+                    'total_ticket' : asign_ticket.assigned_to.total_ticket,
+                    'is_online' : asign_ticket.assigned_to.is_online,
+                }
+
+                return Response({"New ticket" : modify_data})
             except:
                 return Response({"New ticket" : 'Agents are not available'})
-                
-        return Response({"New ticket" : new_ticket.data})
-
+    return Response({"New ticket" : 'Something Wrong'})
 
 
 @api_view(['PUT'])
@@ -111,7 +119,7 @@ def update_ticket(request, id):
             ticket.status = data['status']
 
         if data.get('issue'):
-            ticket.issue__icontains = data['issue']
+            ticket.issue = data['issue']
         
         if data.get('dateCreated'):
             ticket.dateCreated = data['dateCreated']
