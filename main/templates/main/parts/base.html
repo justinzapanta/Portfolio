@@ -1,0 +1,247 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Justin Zapanta</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+
+</head>
+<body class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-10">
+    <header class="py-2.5 mx-auto w-full flex mb-24 z-50 sticky top-0 bg-white">
+        <h1 class="font-roboto flex-1 font-bold text-2xl">Just.<span class="text-sky-500">Dev</span></h1>
+        <nav class="h-full my-auto">
+            <ul class="flex space-x-6 font-roboto text-lg font-semibold">
+                <li><a href="#">About me</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#works">Works</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="md:grid md:grid-cols-2 w-full border-b border-gray-200">
+        <div class="h-full flex flex-col justify-center">
+            <div class="flex justify-center w-full">
+                <div>
+                    <h1 class="font-oswald font-semibold tracking-tighter text-4xl mt-10 text-[#1B1B1B]">Hi, I’m <span class="text-sky-500">Carl Justin Zapanta</span></h1>
+                    <h1 class="font-oswald font-semibold text-3xl">
+                        <a class="typewrite" data-period="2000" data-type='["Django Developer"]'>
+                          <span class="wrap"></span>
+                        </a>
+                    </h1>
+
+                    <p class="text-lg font-roboto mt-8 text-[#1B1B1B]">Hello! I'm Carl Justin Zapanta, a Django developer with a passion for building powerful 
+                        and scalable web applications. Take a look through my portfolio to explore my projects, code, and insights as I 
+                        continue to grow in the world of web development
+                    </p>
+
+                    <div class="flex space-x-5 mt-7">
+                        <a href="#" class="">
+                            <button class="px-7 text-white py-2.5 bg-[#0D1A26] hover:bg-black text-xl font-oswald font-bold rounded-lg">
+                                <i class="fas fa-envelope"></i> Email Me</button>
+                        </a>
+
+                        <a href="#works" class="h-full">
+                            <div class="h-full flex flex-col justify-center my-auto mt-1">
+                                <div class="px-5 py-2 justify-center font-oswald font-bold border hover:bg-slate-100 border-slate-950 rounded-lg ">
+                                    <h1 class="">My Works</h1>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="items-center w-full h-[440px] hidden justify-center md:flex ">
+            <div class="h-full flex flex-col ">
+                <img class="h-[440px]" src="{% static 'img/justin portfolio.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full mt-14">
+        <div>
+            <h1 id="skills" class="text-center font-bold font-oswald text-3xl">My Skills</h1>
+            <div id="" class="flex justify-center mt-10 space-x-4 flex-wrap gap-y-4">
+                <div class="h-24 w-24 shadow-lg border rounded-xl">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">
+                </div>
+    
+                <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                    <div class="w-full flex justify-center">
+                        <img class="h-16 w-16" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="">
+                    </div>
+                </div>
+    
+                <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                    <div class="w-full flex justify-center">
+                        <img class="h-16 w-16" src="https://cdn.jsdelivr.net/npm/devicon@latest/icons/fastapi/fastapi-original.svg" alt="">
+                    </div>
+                </div>
+    
+                <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                    <div class="w-full flex justify-center">
+                        <img class="h-16 w-16" src="https://brandslogos.com/wp-content/uploads/thumbs/ubuntu-logo-vector.svg" alt="">
+                    </div>
+                </div>
+    
+                <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                    <div class="w-full flex justify-center">
+                        <img class="h-16 w-24" src="{% static 'img/beautifulsoup.png' %}" alt="">
+                    </div>
+                </div>
+    
+                <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                    <div class="w-full flex justify-center">
+                        <img class="h-20 w-20 rounded-xl" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="w-full flex justify-center mt-5 space-x-4 flex-wrap gap-y-4">
+            <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                <div class="w-full flex justify-center">
+                    <img class="h-16 w-16" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="">
+                </div>
+            </div>
+
+            <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                <div class="w-full flex justify-center">
+                    <img class="h-16 w-16" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="">
+                </div>
+            </div>
+
+            <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                <div class="w-full flex justify-center">
+                    <img class="h-16 w-16" src="https://cdn.jsdelivr.net/npm/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" alt="">
+                </div>
+            </div>
+
+            <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                <div class="w-full flex justify-center">
+                    <img class="h-20 w-20" src="https://brandslogos.com/wp-content/uploads/thumbs/mysql-logo-vector-1.svg" alt="">
+                </div>
+            </div>
+
+            <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
+                <div class="w-full flex justify-center">
+                    <img class="h-20 w-20" src="https://static-00.iconduck.com/assets.00/postgresql-plain-wordmark-icon-2048x2042-up54u54l.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="w-full mt-28">
+        <h1 id="works" class="font-bold font-oswald text-3xl">My Works</h1>
+
+        <div class="w-full grid grid-cols-[2fr_1fr] mb-32 mt-10" data-aos="fade-right" data-aos-duration="750" data-aos-once="true">
+            <img src="{% static 'img/zappy.png' %}" class="rounded-2xl w-[46rem] border" alt="">
+            
+            <div class="w-full font-roboto ml-10 h-full flex-col flex justify-center" >
+                <h1 class="font-bold text-xl text-sky-500">Zappy</h1>
+                <h1 class="mt-1 font-bold text-gray-500">Django, <span class="mx-2">Stripe SDK,</span>  HTML5, <span class="ml-2">Tailwindcss</span></h1>
+
+                <div class="flex mt-4 font-roboto font-bold space-x-6">
+                    <a href="https://brian578.pythonanywhere.com/" target="_blank" class="text-lg hover:underline hover:underline-offset-2">Live Demo <i class="fas fa-link"></i> </a>
+                    <a href="https://github.com/justinzapanta/Zappy" target="_blank" class="hover:underline hover:underline-offset-2 text-lg">Github <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="w-full grid grid-cols-[1fr_2fr] mb-32" data-aos="fade-left" data-aos-duration="750" data-aos-once="true">     
+            <div class="w-full font-roboto mr-10 h-full flex-col flex justify-center" >
+                <h1 class="font-bold text-xl text-sky-500">Basa Well</h1>
+                <h1 class="mt-1 font-bold text-gray-500">Django, <span class="mx-2">MangaDex API,</span>  HTML5, <span class="ml-2">Tailwindcss</span></h1>
+
+                <div class="flex mt-4 font-roboto font-bold space-x-6">
+                    <a href="https://brian578.pythonanywhere.com/" target="_blank" class="hover:underline hover:underline-offset-2 text-lg">Live Demo <i class="fas fa-link"></i> </a>
+                    <a href="https://brian578.pythonanywhere.com/" target="_blank" class="hover:underline hover:underline-offset-2 text-lg">Github <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="w-full flex justify-end">
+                <img src="{% static 'img/basa_well.png' %}" class="rounded-2xl w-[46rem] border" alt="">
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+
+        var TxtType = function(el, toRotate, period) {
+        this.toRotate = toRotate;
+        this.el = el;
+        this.loopNum = 0;
+        this.period = parseInt(period, 10) || 2000;
+        this.txt = '';
+        this.tick();
+        this.isDeleting = false;
+    };
+
+    TxtType.prototype.tick = function() {
+        var i = this.loopNum % this.toRotate.length;
+        var fullTxt = this.toRotate[i];
+
+        if (this.isDeleting) {
+        this.txt = fullTxt.substring(0, this.txt.length - 1);
+        } else {
+        this.txt = fullTxt.substring(0, this.txt.length + 1);
+        }
+
+        this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+
+        var that = this;
+        var delta = 200 - Math.random() * 100;
+
+        if (this.isDeleting) { delta /= 2; }
+
+        if (!this.isDeleting && this.txt === fullTxt) {
+        delta = this.period;
+        this.isDeleting = true;
+        } else if (this.isDeleting && this.txt === '') {
+        this.isDeleting = false;
+        this.loopNum++;
+        delta = 500;
+        }
+
+        setTimeout(function() {
+        that.tick();
+        }, delta);
+    };
+
+    window.onload = function() {
+        var elements = document.getElementsByClassName('typewrite');
+        for (var i=0; i<elements.length; i++) {
+            var toRotate = elements[i].getAttribute('data-type');
+            var period = elements[i].getAttribute('data-period');
+            if (toRotate) {
+              new TxtType(elements[i], JSON.parse(toRotate), period);
+            }
+        }
+        // INJECT CSS
+        var css = document.createElement("style");
+        css.type = "text/css";
+        css.innerHTML = ".typewrite > .wrap { border-right: 0.2em solid #0ea5e9}";
+        document.body.appendChild(css);
+    };
+      </script>
+</body>
+</html>
+
