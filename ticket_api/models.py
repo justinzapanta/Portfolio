@@ -13,6 +13,8 @@ class Ticket(models.Model):
     user_email = models.CharField(max_length=150)
     user_contactNumber = models.CharField(max_length=30)
 
+    def __str__(self):
+        return f'{self.id} | {self.user_fullName} | {self.status}'
 
 class Agent(models.Model):
     agent_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False, null=False)
@@ -21,10 +23,16 @@ class Agent(models.Model):
     total_ticket = models.IntegerField()
     is_online = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'{self.agent_fullName}'
+
+
 class TicketAssigned(models.Model):
     assigned_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False, null=False)
+    assigned_number = models.IntegerField(default=0)
     assigned_ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     assigned_to = models.ForeignKey(Agent, on_delete=models.CASCADE)
-    ticket_number = models.IntegerField()
 
-
+    
+    def __str__(self):
+        return f'{self.assigned_id} | {self.assigned_to.agent_fullName} | {self.assigned_number}'

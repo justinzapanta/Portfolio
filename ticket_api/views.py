@@ -2,14 +2,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Q
 from .serializers import TicketSerializer
-from .models import Ticket 
+from .models import Ticket, Agent, TicketAssigned
 # Create your views here.
 
 @api_view(['GET'])
 def links(request):
     return Response({
         'Links' : {
-            'GET/POST' : '/api/ticket/',
+            'GET/POST' : '/api/ticket',
             'PUT' : '/api/ticket/{id}'
         },
         'params' : {
@@ -57,10 +57,43 @@ def ticket(request):
     
     elif request.method == 'POST':
         new_ticket = TicketSerializer(data=request.data)
-    
+
         if new_ticket.is_valid():
-            new_ticket.save()
-        
+            try:
+                new_ticket.save()
+
+                #assign ticket to the agents
+                registered = Ticket.objects.get(id = new_ticket.data['id'])
+                first_agent = Agent.objects.filter(is_online = True)
+                
+                agent = Agent.objects.filter(total_ticket__lt = first_agent[0].total_ticket, is_online = True)
+                if agent:
+                    selected_agent = agent[0]
+                    selected_agent.total_ticket = selected_agent.total_ticket + 1
+                    selected_agent.save()
+                    
+                    print(selected_agent.total_ticket)
+                    asign_ticket = TicketAssigned(
+                        assigned_ticket = registered,
+                        assigned_to = selected_agent,
+                        assigned_number = selected_agent.total_ticket
+                    )
+                    asign_ticket.save()
+                else:
+                    first_agent = first_agent[0]
+                    first_agent.total_ticket = first_agent.total_ticket + 1
+                    first_agent.save()
+
+                    asign_ticket = TicketAssigned(
+                        assigned_ticket = registered,
+                        assigned_to = first_agent,
+                        assigned_number = first_agent.total_ticket
+                    )
+                    asign_ticket.save()
+                    
+            except:
+                return Response({"New ticket" : 'Agents are not available'})
+                
         return Response({"New ticket" : new_ticket.data})
 
 
