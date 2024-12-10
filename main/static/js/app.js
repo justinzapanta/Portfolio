@@ -41,6 +41,7 @@ function selected(this_){
     endpoint = url.textContent
     backup_enpoint = url.textContent
     request_methond = method.textContent
+    params_object = {}
     
     dropdown('none')
     console.log(method.textContent)
@@ -68,7 +69,7 @@ async function send_request(){
     
     text += `\n\t]\n}`
     response_textrea.value = text
-
+    show_response()
 }
 send_request()
 
@@ -99,7 +100,7 @@ function show_params(){
             </div>
         </div>
     `
-    const list = data_list[endpoint]
+    const list = data_list[backup_enpoint]
     
     list.forEach(data => {
         const new_div = document.createElement('div')
@@ -129,15 +130,16 @@ function show_params(){
 function show_response(){
     params_button.classList.remove('font-bold')
     response_button.classList.add('font-bold')
-
     params_body.classList.add('hidden')
     response_body.classList.remove('hidden')
+    display_url.textContent = backup_enpoint
+    params_object = {}
 }
 
 
 
 //params
-const params_object = {}
+let params_object = {}
 
 function on_type(this_){
     //create key and value or update it
