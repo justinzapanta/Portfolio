@@ -18,6 +18,7 @@ function dropdown(_this){
 const display_method = document.querySelector('#display_method')
 const display_url = document.querySelector('#display_url')
 let endpoint = '/api/ticket'
+let backup_enpoint = '/api/ticket'
 let request_methond = 'GET:'
 
 const options = document.querySelectorAll('.options')
@@ -38,8 +39,9 @@ function selected(this_){
     display_method.textContent = method.textContent
     display_url.textContent = url.textContent
     endpoint = url.textContent
+    backup_enpoint = url.textContent
     request_methond = method.textContent
-
+    
     dropdown('none')
     console.log(method.textContent)
 }
@@ -70,17 +72,106 @@ async function send_request(){
 }
 send_request()
 
+
+
+
 const response_body = document.querySelector('#response_body')
 const params_body = document.querySelector('#params_body')
+const params_property = document.querySelector('#params_property')
+const response_button = document.querySelector('#response_button')
+const params_button = document.querySelector('#params_button')
+const data_list = {
+    '/api/ticket' : ['id', 'status', 'issue', 'dateCreated', 'close', 'user_fullName', 'user_email', 'user_contactNumber']
+}
+
+
 function show_params(){
+    params_button.classList.add('font-bold')
+    response_button.classList.remove('font-bold')
+    params_property.innerHTML = `
+        <div class="grid grid-cols-2">
+            <div>
+                <h1 class="font-roboto text-center text-sm ">Key</h1>
+            </div>
+
+            <div>
+                <h1 class="font-roboto text-center text-sm">Value</h1>
+            </div>
+        </div>
+    `
+    const list = data_list[endpoint]
+    
+    list.forEach(data => {
+        const new_div = document.createElement('div')
+        new_div.classList.add('grid', 'grid-cols-2', 'gap-6')
+
+        new_div.innerHTML = `
+            <div class="w-full">
+                <input type="text" readonly value="${data}" class="bg-gray-100 w-full text-center h-8 rounded-md border-gray-400 border">
+            </div>
+
+            <div class="w-full font-roboto">
+                <input oninput="on_type(this)" field='${data}' placeholder="Optional" type="text" class="w-full text-center h-8 rounded-md border-gray-400 border">
+            </div>
+        `
+
+        params_property.appendChild(new_div)
+    })
+
     params_body.classList.remove('hidden')
     response_body.classList.add('hidden')
 }
 
 
+
+
+
 function show_response(){
+    params_button.classList.remove('font-bold')
+    response_button.classList.add('font-bold')
+
     params_body.classList.add('hidden')
     response_body.classList.remove('hidden')
+}
+
+
+
+//params
+const params_object = {}
+
+function on_type(this_){
+    //create key and value or update it
+    params_object[this_.getAttribute('field')] = this_.value
+    //
+    let params_text = '?'
+    let start = true
+    let has_value = false
+    for(field in params_object){
+        if (params_object[field] != ''){
+            if (!start){
+                params_text += '&'
+            }
+
+            params_text += `${field}=${params_object[field]}`
+            has_value = true
+        }
+        start = false
+    }
+
+
+    //clean
+    if (params_text[1] == '&'){
+        params_text = params_text.slice(0, 1) + params_text.slice(2)
+    }
+
+    console.log(params_body)
+    if (!has_value){
+        params_text = ''
+        endpoint = backup_enpoint
+    }
+
+    endpoint  = backup_enpoint + params_text
+    display_url.textContent = endpoint 
 }
 
 
