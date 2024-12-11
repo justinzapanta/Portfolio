@@ -89,7 +89,7 @@
     
                 <div class="h-24 w-24 shadow-lg flex-col flex justify-center border rounded-xl">
                     <div class="w-full flex justify-center">
-                        <img class="h-16 w-16" src="https://brandslogos.com/wp-content/uploads/thumbs/ubuntu-logo-vector.svg" alt="">
+                        <img class="h-16 w-24" src="{% static 'img/rest.png' %}" alt="">
                     </div>
                 </div>
     
@@ -208,17 +208,17 @@
                     <!--Options-->
                     <div id="url_dropdown" class="hidden z-20 w-full overflow-y-auto h-52 px-2 py-2 bg-white  shadow-lg border space-y-1 rounded-b-xl absolute top-0">
                         <div onclick="selected(this)" index="0" class="w-full flex bg-gray-200 py-1.5 font-roboto hover:cursor-pointer px-3 rounded-md options">
-                            <h1 id="h1-0" class="text-emerald-600 text-sm font-bold">GET: </h1>
+                            <h1 id="h1-0" class="text-emerald-600 text-sm font-bold">GET:</h1>
                             <h1 id="h2-0" class="flex-1 ml-3 text-sm font-roboto">/api/ticket</h1>
                         </div>
 
                         <div onclick="selected(this)" index="1" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
-                            <h1 id="h1-1" class="text-emerald-600 text-sm font-bold">POST: </h1>
+                            <h1 id="h1-1" class="text-emerald-600 text-sm font-bold">POST:</h1>
                             <h1 id="h2-1" class="flex-1 ml-3 text-sm font-roboto">/api/ticket</h1>
                         </div>
 
                         <div onclick="selected(this)" index="2" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
-                            <h1 id="h1-2" class="text-emerald-600 text-sm font-bold">PUT: </h1>
+                            <h1 id="h1-2" class="text-emerald-600 text-sm font-bold">PUT:</h1>
                             <h1 id="h2-2" class="flex-1 ml-3 text-sm font-roboto">/api/ticket/{id}</h1>
                         </div>
                     </div>
@@ -227,16 +227,19 @@
                     <div class="font-roboto px-4 flex space-x-5 mt-2">
                         <h1 onclick="show_response(this)" id="response_button" class="text-sm font-roboto hover:cursor-pointer font-bold hover:underline hover:underline-offset-2">Response</h1>
                         <a onclick="show_params(this)" id="params_button" class="text-sm hover:cursor-pointer hover:underline hover:underline-offset-2">Params</a>
-                        <a class="text-sm hover:cursor-pointer hover:underline hover:underline-offset-2">Body</a>
+                        <a onclick="show_body(this)" id="body_button" class="text-sm hover:cursor-pointer hover:underline hover:underline-offset-2">Body</a>
                     </div>
 
                     <!--params body-->
                         <div id="params_body" class="w-full h-full px-4 mt-2 font-roboto hidden">
-                            <h1 class="text-sm text-gray-500">Params Query</h1>
+                            <div class="flex w-full pr-2">
+                                <h1 class="text-sm text-gray-500 flex-1">Params Query</h1>
+                                <h1 class="text-sm text-gray-500 text-end">Filter Result</h1>
+                            </div>
                             <div id="params_property" class="h-[17.1rem] overflow-y-auto space-y-4 text-sm font-roboto focus:ring-0 focus:ring-gray-300 rounded-md w-full resize-none focus:border-none focus:ring-offset-0 p-3 border-t-gray-300 border-b-gray-300 border-t border-b mt-1" >
                                 <div class="grid grid-cols-2">
                                     <div>
-                                        <h1 class="font-roboto text-center text-sm ">Key</h1>
+                                        <h1 class="font-roboto text-center text-sm ">Field</h1>
                                     </div>
 
                                     <div>
@@ -256,10 +259,39 @@
                             </div>
                         </div>
                     
-                    <!--response-->
+                    <!--response body-->
                     <div id="response_body" class="w-full h-full px-4 mt-2 font-roboto">
                         <h1 class="text-sm text-gray-500">Response</h1>
                         <textarea id="response_textrea" readonly class="h-[17.1rem] text-sm font-roboto focus:ring-0 focus:ring-gray-300 rounded-md w-full resize-none focus:border-none focus:ring-offset-0 p-3 border mt-1" ></textarea>
+                    </div>
+
+                    <div class="border-red-500"></div>
+                    <!--body body-->
+                    <div id="body_body" class="w-full h-full px-4 mt-2 font-roboto hidden">
+                        <div class="flex w-full pr-2">
+                            <h1 class="text-sm text-gray-500 flex-1">Json</h1>
+                            <h1 id="body_guide" class="text-sm text-gray-500 text-end">Create Ticket</h1>
+                        </div>
+                        <textarea id="body_textrea" class="h-[17.1rem] text-sm font-roboto focus:ring-0 focus:ring-gray-300 rounded-md w-full resize-none focus:border-none focus:ring-offset-0 p-3 border mt-1" ></textarea>
+                    </div>
+                </div>
+
+
+                <!--PUT MODAL-->
+                <div id="put_modal" class="h-full w-full flex-col hidden justify-center rounded-2xl absolute top-0 left-0 z-30 " style="background-color: rgba(0, 0, 0, 0.247);">
+                    <div class="w-full flex justify-center">
+                        <div class="w-96 h-52 bg-white rounded-xl shadow-xl flex flex-col justify-center">
+                            <h1 class="text-center font-bold font-roboto text-xl mb-2">Ticket ID</h1>
+                            <div class="w-full flex justify-center">
+                                <div class="flex flex-col">
+                                    <input id="input_id" type="text" class="w-64 h-10 pl-1 border border-gray-400 rounded-lg">
+                                    <div class="flex w-full justify-center mt-4 space-x-4">
+                                        <button onclick="close_putModal()" class="px-10 py-2 border border-gray-400 hover:bg-gray-100 rounded-lg">Close</button>
+                                        <button onclick="enter_id()" class="px-10 py-2 border rounded-lg bg-sky-500 hover:bg-sky-600 text-white font-roboto font-bold">Enter</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

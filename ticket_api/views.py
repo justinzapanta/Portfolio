@@ -49,12 +49,13 @@ def ticket(request):
 
         if params.get('user_contactNumber'):
             filters &= Q(user_contactNumber = params['user_contactNumber'])
-
-        ticket = Ticket.objects.filter(filters)
-        serialize = TicketSerializer(ticket, many=True)
-        
-        return Response({"results" : serialize.data})
-    
+        try:
+            ticket = Ticket.objects.filter(filters)
+            serialize = TicketSerializer(ticket, many=True)
+            return Response({"results" : serialize.data})
+        except:
+            return Response({"results" : '[]'})
+            
     elif request.method == 'POST':
         new_ticket = TicketSerializer(data=request.data)
 
@@ -73,7 +74,6 @@ def ticket(request):
                     selected_agent.total_ticket = selected_agent.total_ticket + 1
                     selected_agent.save()
                     
-                    print(selected_agent.total_ticket)
                     asign_ticket = TicketAssigned(
                         assigned_ticket = registered,
                         assigned_to = selected_agent,
@@ -100,10 +100,10 @@ def ticket(request):
                     'is_online' : asign_ticket.assigned_to.is_online,
                 }
 
-                return Response({"New ticket" : modify_data})
+                return Response({"result" : modify_data})
             except:
-                return Response({"New ticket" : 'Agents are not available'})
-    return Response({"New ticket" : 'Something Wrong'})
+                return Response({"result" : 'Agents are not available'})
+    return Response({"result" : 'Something Wrong'})
 
 
 @api_view(['PUT'])
@@ -135,11 +135,12 @@ def update_ticket(request, id):
 
         if data.get('user_contactNumber'):
             ticket.user_contactNumber = data['user_contactNumber']
+        ticket.save()
         
         update = TicketSerializer(ticket, many=False)
 
-        return Response({"Updated" : update.data})
+        return Response({"result" : update.data})
     except:
-        return Response({"message" : 'Something Wrong'})
+        return Response({"result" : 'Something Wrong'})
 
 

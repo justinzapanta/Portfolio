@@ -3,7 +3,7 @@ const down_icon = document.querySelector('#down_icon')
 const url_dropdown = document.querySelector('#url_dropdown')
 
 id = 0
-function dropdown(_this){
+function dropdown(){
     if (url_dropdown.classList.contains('hidden')){
         url_dropdown.classList.remove('hidden')
         down_icon.classList.add('hidden')
@@ -17,6 +17,7 @@ function dropdown(_this){
 
 const display_method = document.querySelector('#display_method')
 const display_url = document.querySelector('#display_url')
+const body_guide = document.querySelector('#body_guide')
 let endpoint = '/api/ticket'
 let backup_enpoint = '/api/ticket'
 let request_methond = 'GET:'
@@ -43,56 +44,150 @@ function selected(this_){
     request_methond = method.textContent
     params_object = {}
     
-    dropdown('none')
-    console.log(method.textContent)
+
+    dropdown()
+    show_response()
+    hide_button(method.textContent)
+    body_textrea.value = ''
+    body_textrea.classList.replace('border-red-500', 'border-gray-400')
+
+    if (request_methond === 'POST:'){
+        body_guide.textContent = 'Create'
+    }else{
+        body_guide.textContent = 'Update'
+    }
+
 }
 
 const response_textrea = document.querySelector('#response_textrea')
+const body_textrea = document.querySelector('#body_textrea')
 
 async function send_request(){
     let clean = request_methond.split(':')
     clean = clean[0]
-    const response = await fetch(endpoint, {
-        method : clean,
-        headers : {'Content-Type' : 'application/json'},
-    })
+    let response
+
+    if (clean === 'GET'){
+        response = await fetch(endpoint, {
+            method : clean,
+            headers : {'Content-Type' : 'application/json'},
+        })
+
+    }else if (clean === 'POST' || clean === 'PUT'){
+        if (body_textrea.value !== ''){
+            textarea_json = JSON.parse(body_textrea.value)
+            submit_request = true
+
+            for (field in textarea_json){
+                if (textarea_json[field] === 'Change the value'){
+                    submit_request = false
+                }
+            }
+
+            if (submit_request){
+                response = await fetch(endpoint, {
+                    method : clean,
+                    headers : {'Content-Type' : 'application/json'},
+                    body : JSON.stringify(textarea_json)
+                })
+            }else{
+                console.log('not send')
+                body_textrea.classList.add('border-red-500')
+            }
+        }else{
+            body_textrea.classList.add('border-red-500')
+            show_body()
+        }
+    }
 
     const response_json = await response.json()
-
-    let text = `{\n \tresult : [ \n\t{`
-    response_json.results.forEach(result => {
-        for(key in result){
-            text += `\n\t\t"${key}" : "${result[key]},"`
+    let result
+ 
+    //result
+    if (clean === 'GET'){
+        try{
+            start = true
+            let text = `{\n \tresult : [ `
+            response_json.results.forEach(result => {
+                text += '\n\t{'
+                for(key in result){
+                    text += `\n\t\t"${key}" : "${result[key]}"`
+                    if (key != 'user_contactNumber'){
+                        text += ','
+                    }
+                }
+                text += `\n\t},`
+            })
+            
+            text += `\n\t]\n}`
+            response_textrea.value = text
+        }catch{
+            response_textrea.value = `result : ${response_json.results}`
         }
-        text += `\n\t},`
-    })
-    
-    text += `\n\t]\n}`
-    response_textrea.value = text
+    //post
+    }else if (clean === 'POST'){
+        result = JSON.stringify(response_json.result)
+        convert_toList = result.split(',')
+
+    //update
+    }else if (clean === 'PUT'){
+        result = JSON.stringify(response_json.result)
+        convert_toList = result.split(',')
+    }
+
+    //result
+    if (clean === 'POST' || clean === 'PUT'){
+        if (clean === 'PUT'){
+            text = 'Updated\n{'
+        }else{
+            text = 'Created\n{'
+        }
+
+        result = JSON.stringify(response_json.result)
+        convert_toList = result.split(',')
+
+        convert_toList.forEach(element => {       
+            element = element.split(':').join(' : ')
+            
+            text+= `\n\t${element},`
+
+        })
+        text += '\n}'
+
+        response_textrea.value = text
+    }
+
     show_response()
 }
 send_request()
 
 
-
-
-const response_body = document.querySelector('#response_body')
-const params_body = document.querySelector('#params_body')
 const params_property = document.querySelector('#params_property')
+
+
 const response_button = document.querySelector('#response_button')
 const params_button = document.querySelector('#params_button')
+const body_button = document.querySelector('#body_button')
+const response_body = document.querySelector('#response_body')
+const params_body = document.querySelector('#params_body')
+const body_body = document.querySelector('#body_body')
+
 const data_list = {
     '/api/ticket' : ['id', 'status', 'issue', 'dateCreated', 'close', 'user_fullName', 'user_email', 'user_contactNumber']
 }
 
 
+
 function show_params(){
     params_button.classList.add('font-bold')
     response_button.classList.remove('font-bold')
+    body_button.classList.remove('font-bold')
+    body_body.classList.add('hidden')
+
     params_property.innerHTML = `
         <div class="grid grid-cols-2">
             <div>
-                <h1 class="font-roboto text-center text-sm ">Key</h1>
+                <h1 class="font-roboto text-center text-sm ">Field</h1>
             </div>
 
             <div>
@@ -125,17 +220,70 @@ function show_params(){
 
 
 
-
-
 function show_response(){
     params_button.classList.remove('font-bold')
+    body_button.classList.remove('font-bold')
     response_button.classList.add('font-bold')
+
+    body_body.classList.add('hidden')
     params_body.classList.add('hidden')
     response_body.classList.remove('hidden')
-    display_url.textContent = backup_enpoint
+    if (request_methond !== 'PUT:'){
+        display_url.textContent = backup_enpoint
+    }
+    params_object = {}
+    endpoint = backup_enpoint
+}
+
+function show_body(){
+    body_button.classList.add('font-bold')
+    params_button.classList.remove('font-bold')
+    response_button.classList.remove('font-bold')
+
+    response_body.classList.add('hidden')
+    params_body.classList.add('hidden')
+    body_body.classList.remove('hidden')
+
+    if (request_methond !== 'PUT:'){
+        display_url.textContent = backup_enpoint
+    }
+
+    //textarea guide
+    if (request_methond === 'POST:'){
+        const fields = ["user_fullName", "user_email", "user_contactNumber", "issue"]
+
+        text = '{'
+        fields.forEach(field => {
+            text += `\n\t"${field}" : "Change the value"`
+            
+            if (field !== 'issue'){
+                text += ','
+            }
+        })
+        text += '\n}'
+        body_textrea.value = text
+    }
     params_object = {}
 }
 
+const put_modal = document.querySelector('#put_modal')
+const input_id = document.querySelector('#input_id')
+
+function close_putModal(){
+    put_modal.classList.replace('flex', 'hidden')
+}
+
+function show_putModal(){
+    put_modal.classList.replace('hidden', 'flex')
+}
+
+function enter_id(){
+    endpoint = backup_enpoint
+    const id = input_id.value
+    endpoint = endpoint.split('{id}')[0] + id
+    display_url.textContent = endpoint
+    close_putModal()
+}
 
 
 //params
@@ -166,7 +314,6 @@ function on_type(this_){
         params_text = params_text.slice(0, 1) + params_text.slice(2)
     }
 
-    console.log(params_body)
     if (!has_value){
         params_text = ''
         endpoint = backup_enpoint
@@ -175,6 +322,41 @@ function on_type(this_){
     endpoint  = backup_enpoint + params_text
     display_url.textContent = endpoint 
 }
+
+
+function hide_button(method){
+    if (method === 'GET:'){
+        body_button.classList.add('hidden')
+        params_button.classList.remove('hidden')
+        response_button.classList.remove('hidden')
+    }else if (method === 'POST:'){
+        body_button.classList.remove('hidden')
+        params_button.classList.add('hidden')
+        response_button.classList.remove('hidden')
+    }else if (method === 'PUT:'){
+        show_putModal()
+        body_button.classList.remove('hidden')
+        params_button.classList.add('hidden')
+        response_button.classList.remove('hidden')
+    }
+}
+
+hide_button(request_methond)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
