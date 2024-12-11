@@ -64,6 +64,8 @@ const response_textrea = document.querySelector('#response_textrea')
 const body_textrea = document.querySelector('#body_textrea')
 
 async function send_request(){
+    const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
     let clean = request_methond.split(':')
     clean = clean[0]
     let response
@@ -71,7 +73,7 @@ async function send_request(){
     if (clean === 'GET' || clean === "DELETE"){
         response = await fetch(endpoint, {
             method : clean,
-            headers : {'Content-Type' : 'application/json'},
+            headers : {'Content-Type' : 'application/json', 'X-CSRFToken': csrftoken},
         })
 
     }else if (clean === 'POST' || clean === 'PUT'){
@@ -94,7 +96,7 @@ async function send_request(){
             if (submit_request){
                 response = await fetch(endpoint, {
                     method : clean,
-                    headers : {'Content-Type' : 'application/json'},
+                    headers : {'Content-Type' : 'application/json', 'X-CSRFToken': csrftoken},
                     body : JSON.stringify(textarea_json)
                 })
             }else{
@@ -118,12 +120,25 @@ async function send_request(){
             response_json.results.forEach(result => {
                 text += '\n\t{'
                 for(key in result){
-                    text += `\n\t\t"${key}" : "${result[key]}"`
+                    if (typeof(result[key]) == 'object'){
+                        let start = true
+                        let new_object = result[key]
+                        text += `\n\t\t"${key}" : {`
+
+                        for(field in new_object){
+                            if (start){
+                                text += `\n\t\t\t"${field}" : "${new_object[field]}",`
+                            }
+                        }
+                        text += `\n\t\t}`
+                    }else{
+                        text += `\n\t\t"${key}" : "${result[key]}"`
+                    }
                     if (key != 'user_contactNumber'){
                         text += ','
                     }
                 }
-                text += `\n\t},`
+                text += `\n\t},\n`
             })
             
             text += `\n\t]\n}`
@@ -183,7 +198,9 @@ const params_body = document.querySelector('#params_body')
 const body_body = document.querySelector('#body_body')
 
 const data_list = {
-    '/api/ticket' : ['id', 'status', 'issue', 'dateCreated', 'close', 'user_fullName', 'user_email', 'user_contactNumber']
+    '/api/ticket' : ['id', 'status', 'issue', 'dateCreated', 'close', 'user_fullName', 'user_email', 'user_contactNumber'],
+    '/api/agent' : ['agent_id', 'agent_fullName', 'agent_email', 'total_ticket', 'is_online'],
+    '/api/ticket/assigned' : ['assigned_id', 'assigned_number', 'user_id', 'user_fullName', 'user_email', 'agent_id', 'agent_fullName', 'agent_email']
 }
 
 
@@ -243,7 +260,6 @@ function show_response(){
         endpoint = backup_enpoint
     }
     params_object = {}
-
 }
 
 function show_body(){
@@ -260,34 +276,53 @@ function show_body(){
     }
 
     //textarea guide
+
     if (request_methond === 'POST:'){
-        const fields = ["user_fullName", "user_email", "user_contactNumber", "issue"]
+        const fields = {
+            '/api/ticket' : ["user_fullName", "user_email", "user_contactNumber", "issue"],
+            '/api/agent'  : ['agent_fullName', 'agent_email']
+        }
 
         text = '{'
-        fields.forEach(field => {
+        fields[backup_enpoint].forEach(field => {
             text += `\n\t"${field}" : "Change the value"`
             
-            if (field !== 'issue'){
+            if (field !== 'issue' && field !== 'agent_email'){
                 text += ','
             }
         })
         text += '\n}'
         body_textrea.value = text
     }else if (request_methond === 'PUT:'){
-        const fields = ["status", "user_fullName", "user_email", "user_contactNumber", "issue"]
-        const comments = [
-            'The status of the ticket. Possible values: "open", "in progress", "closed"',
-            'The full name of the user associated with the ticket. Example: "Carl Justin Zapanta"',
-            'The email address of the user. Example: "justin@example.com"',
-            'The contact number of the user. Example: "095374234531"',
-            'A brief description of the issue related to the ticket. Example: "Slow Internet Connection"'
-        ]
+        const fields = { 
+            '/api/ticket/{id}' :  ["status", "user_fullName", "user_email", "user_contactNumber", "issue"],
+            '/api/agent/{id}' : ['agent_fullName', 'agent_email', 'is_online']
+        }
+        const comments = {
+            '/api/ticket/{id}' : [
+                'The status of the ticket. Possible values: "open", "in progress", "closed"',
+                'The full name of the user associated with the ticket. Example: "Carl Justin Zapanta"',
+                'The email address of the user. Example: "justin@example.com"',
+                'The contact number of the user. Example: "095374234531"',
+                'A brief description of the issue related to the ticket. Example: "Slow Internet Connection"'
+            ],
+            '/api/agent/{id}' : [
+                'The full name of the agent. Example: "Carl Justin Zapanta"',
+                'The email address of the agent. Example: "justin@example.com"',
+                'Indicates whether the agent is currently online Possible values: true, false'
+            ]
 
-        text = `Example:\n{\n\t"user_fullName" : "Carl Justin Zapanta"\n} \n\nAvailable Fields:`
+        }
+
+        if (backup_enpoint === '/api/ticket/{id}'){
+            text = `Example:\n{\n\t"user_fullName" : "Carl Justin Zapanta"\n} \n\nAvailable Fields:`
+        }else{
+            text = `Example:\n{\n\t"agent_fullName" : "Carl Justin Zapanta"\n} \n\nAvailable Fields:`
+        }
         
         let index = 0
-        fields.forEach(field => {
-            text += '\n - ' + field +': ' + comments[index]
+        fields[backup_enpoint].forEach(field => {
+            text += '\n - ' + field +': ' + comments[backup_enpoint][index]
             index += 1
         })
         body_textrea.placeholder = text

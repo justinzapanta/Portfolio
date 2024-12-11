@@ -20,7 +20,7 @@ class Agent(models.Model):
     agent_id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False, null=False)
     agent_fullName = models.CharField(max_length=100)
     agent_email = models.CharField(max_length=100)
-    total_ticket = models.IntegerField()
+    total_ticket = models.IntegerField(default=0)
     is_online = models.BooleanField(default=False)
 
     def __str__(self):
@@ -36,3 +36,4 @@ class TicketAssigned(models.Model):
     
     def __str__(self):
         return f'{self.assigned_id} | {self.assigned_to.agent_fullName} | {self.assigned_number}'
+    

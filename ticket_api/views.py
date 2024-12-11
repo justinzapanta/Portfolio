@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Q
-from .serializers import TicketSerializer
+from .serializers import TicketSerializer, AgentSerializer, TicketAssignedSerializer
 from .models import Ticket, Agent, TicketAssigned
 # Create your views here.
 
@@ -11,7 +11,9 @@ def links(request):
         'Links' : {
             'GET/POST' : '/api/ticket',
             'PUT' : '/api/ticket/{id}',
-            'DELETE' : '/api/ticket/{id}'
+            'DELETE' : '/api/ticket/{id}',
+
+            'GET/POST' : '/api/agent',
         },
     })
 
@@ -153,4 +155,99 @@ def update_ticket(request, id):
 
 @api_view(['GET', 'POST'])
 def agent(request):
-    pass
+    if request.method == 'GET':
+        params = request.query_params
+        filters = Q()
+
+        if params.get('agent_id'):
+            filters &= Q(agent_id = params['agent_id'])
+
+        if params.get('agent_fullName'):
+            filters &= Q(agent_fullName__icontains = params['agent_fullName'])
+
+        if params.get('agent_email'):
+            filters &= Q(agent_email = params['agent_email'])
+
+        if params.get('total_ticket'):
+            filters &= Q(total_ticket = params['total_ticket'])
+
+        if params.get('is_online'):
+            filters &= Q(is_online = params['is_online'])
+
+        
+        agents = Agent.objects.filter(filters)
+        serialize = AgentSerializer(agents, many=True)
+
+        return Response({'results' : serialize.data})
+    elif request.method == 'POST':
+        new_agent = AgentSerializer(data=request.data)
+
+        if new_agent.is_valid():
+            new_agent.save()
+
+            return Response({'result' : new_agent.data})
+        return Response({'result' : 'Something Wrong'})
+    return Response({'results' : 'Something Wrong'})
+
+
+@api_view(['PUT', 'DELETE'])
+def update_agent(request, id):
+    if request.method == 'PUT':
+        # try:
+        agent = Agent.objects.get(agent_id = id)
+        body = request.data
+
+        if body.get('agent_fullName'):
+            agent.agent_fullName = body['agent_fullName']
+
+        if body.get('agent_email'):
+            agent.agent_email = body['agent_email']
+        agent.save()
+
+        serialize = AgentSerializer(agent, many=False)
+        return Response({'result' : serialize.data})
+        # except:
+        #     return Response({'result' : 'Ensure the ID is correct'})
+    elif request.method == 'DELETE':
+        try:
+            agent = Agent.objects.get(agent_id = id)
+            agent.delete()
+            return Response({"result" : 'Deleted Successfully'})
+        except:
+             return Response({'result' : 'Ensure the ID is correct'})
+
+
+@api_view(['GET'])
+def ticket_assigned(request):
+    try:
+        params = request.query_params
+        filter = Q()
+        if params.get('assigned_id'):
+            filter &= Q(assigned_id = params['assigned_id'])
+            
+        if params.get('assigned_number'):
+            filter &= Q(assigned_id = params['assigned_number'])
+
+        if params.get('user_id'):
+            filter &= Q(assigned_ticket__id = params['user_id'])
+
+        if params.get('user_fullName'):
+            filter &= Q(assigned_ticket__user_fullName = params['user_fullName'])
+
+        if params.get('user_email'):
+            filter &= Q(assigned_ticket__user_email = params['user_email'])
+            
+        if params.get('agent_id'):
+            filter &= Q(assigned_to__agent_id = params['agent_id'])
+
+        if params.get('agent_fullName'):
+            filter &= Q(assigned_to__agent_fullName = params['agent_fullName'])
+
+        if params.get('agent_email'):
+            filter &= Q(assigned_to__agent_email = params['agent_email'])
+
+        assigned = TicketAssigned.objects.filter(filter)
+        serialize = TicketAssignedSerializer(assigned, many=True)
+        return Response({'results' : serialize.data})
+    except:
+        return Response({'results' : 'Something Wrong'})

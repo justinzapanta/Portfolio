@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Justin Zapanta</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -225,6 +226,31 @@
                         <div onclick="selected(this)" index="3" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
                             <h1 id="h1-3" class="text-red-500 text-sm font-bold">DELETE:</h1>
                             <h1 id="h2-3" class="flex-1 ml-3 text-sm font-roboto">/api/ticket/{id}</h1>
+                        </div>
+
+                        <div onclick="selected(this)" index="4" class="w-full flex py-1.5 font-roboto hover:bg-gray-100 hover:cursor-pointer px-3 rounded-md options">
+                            <h1 id="h1-4" class="text-emerald-600 text-sm font-bold">GET:</h1>
+                            <h1 id="h2-4" class="flex-1 ml-3 text-sm font-roboto">/api/agent</h1>
+                        </div>
+
+                        <div onclick="selected(this)" index="5" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
+                            <h1 id="h1-5" class="text-blue-500 text-sm font-bold">POST:</h1>
+                            <h1 id="h2-5" class="flex-1 ml-3 text-sm font-roboto">/api/agent</h1>
+                        </div>
+
+                        <div onclick="selected(this)" index="6" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
+                            <h1 id="h1-6" class="text-yellow-500 text-sm font-bold">PUT:</h1>
+                            <h1 id="h2-6" class="flex-1 ml-3 text-sm font-roboto">/api/agent/{id}</h1>
+                        </div>
+
+                        <div onclick="selected(this)" index="7" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
+                            <h1 id="h1-7" class="text-red-500 text-sm font-bold">DELETE:</h1>
+                            <h1 id="h2-7" class="flex-1 ml-3 text-sm font-roboto">/api/agent/{id}</h1>
+                        </div>
+
+                        <div onclick="selected(this)" index="8" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
+                            <h1 id="h1-8" class="text-emerald-600 text-sm font-bold">GET:</h1>
+                            <h1 id="h2-8" class="flex-1 ml-3 text-sm font-roboto">/api/ticket/assigned</h1>
                         </div>
                     </div>
 
