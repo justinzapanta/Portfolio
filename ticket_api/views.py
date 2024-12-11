@@ -263,7 +263,6 @@ def ticket_assigned(request):
 @api_view(['POST'])
 def send_email(request):
     data = request.data
-    print(data)
     if data:
         user_fullName = data.get('user_fullName')
         user_message = data.get('user_message')
