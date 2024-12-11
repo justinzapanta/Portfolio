@@ -448,13 +448,45 @@ hide_button(request_methond)
 
 
 
+const loading_screen = document.querySelector('#loading_screen')
+const name_ = document.querySelector('#name')
+const email = document.querySelector('#email')
+const message = document.querySelector('#message')
+const contact_form = document.querySelector('#contact_form')
+const success_modal = document.querySelector('#success_modal')
+
+async function submit_email(event){
+    event.preventDefault();
+    loading_screen.classList.remove('hidden')
+    const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    const response = await fetch('/api/email', {
+        method : 'POST',
+        headers : {'Content-Type' : 'application/json', 'X-CSRFToken': csrftoken},
+        body : JSON.stringify({
+            user_fullName : name_.value,
+            user_message : message.value,
+            user_email : email.value
+        })
+    })
+
+    const response_json = await response.json()
+    if (response_json){
+        loading_screen.classList.add('hidden')
+        success_modal.classList.remove('hidden')
+    }
+}
+
+function close_success_modal(){
+    success_modal.classList.add('hidden')
+}
 
 
-
-
-
-
-
+function adjustHeight(textarea) {
+    textarea.style.height = "auto"
+    textarea.style.height = `${textarea.scrollHeight}px`
+  }
+  
 
 
 
@@ -536,3 +568,4 @@ css.type = "text/css";
 css.innerHTML = ".typewrite > .wrap { border-right: 0.2em solid #0ea5e9}";
 document.body.appendChild(css);
 };
+

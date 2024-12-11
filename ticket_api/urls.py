@@ -8,4 +8,6 @@ urlpatterns = [
     path('ticket/<str:id>', views.update_ticket),
     path('agent', views.agent),
     path('agent/<str:id>', views.update_agent),
+
+    path('email', views.send_email)
 ]

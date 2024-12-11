@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from django.db.models import Q
 from .serializers import TicketSerializer, AgentSerializer, TicketAssignedSerializer
 from .models import Ticket, Agent, TicketAssigned
+from django.core.mail import send_mail
 # Create your views here.
 
 @api_view(['GET'])
@@ -146,6 +147,11 @@ def update_ticket(request, id):
     else:
         try:
             ticket = Ticket.objects.get(id = id)
+            asigned = TicketAssigned.objects.get(assigned_ticket = ticket)
+            agent = Agent.objects.get(agent_id = asigned.assigned_to.agent_id)
+            agent.total_ticket = agent.total_ticket - 1
+            agent.save()
+
             ticket.delete()
             return Response({"result" : 'Deleted Successfully'})
         except:
@@ -251,3 +257,24 @@ def ticket_assigned(request):
         return Response({'results' : serialize.data})
     except:
         return Response({'results' : 'Something Wrong'})
+    
+
+
+@api_view(['POST'])
+def send_email(request):
+    data = request.data
+    print(data)
+    if data:
+        user_fullName = data.get('user_fullName')
+        user_message = data.get('user_message')
+        user_email = data.get('user_email')
+
+        send_mail(
+            subject = user_fullName,
+            message = user_message,
+            from_email = user_email,
+            recipient_list = ['zapantajustin5@gmail.com']
+        )
+    return Response({'result' : 'success'})
+
+    

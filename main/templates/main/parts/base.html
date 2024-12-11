@@ -12,7 +12,34 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-
+    <style>
+       @keyframes pulse-scale {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.95);
+            }
+        }
+        .animate-pulse-scale {
+            animation: pulse-scale 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes dots {
+            0%, 20% {
+                content: ".";
+            }
+            40% {
+                content: "..";
+            }
+            60%, 100% {
+                content: "...";
+            }
+        }
+        .animate-dots::after {
+            content: "";
+            animation: dots 1.5s infinite;
+        }
+    </style>
 </head>
 <body class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-10">
     <header class="py-2.5 mx-auto w-full flex mb-24 z-50 sticky top-0 bg-white">
@@ -343,6 +370,61 @@
         </div>
     </div>
 
+    <!--Contact-->
+    <div class="mt-12 w-full mb-40 font-roboto" data-aos="fade-up" data-aos-duration="750" data-aos-once="true">
+        <h1 id="contact" class="font-bold font-oswald text-4xl text-center">Contact Me</h1>
+        <h1 class="font-roboto font-bold text-sky-500 text-2xl text-center mt-3">zapantajustin5@gmail.com</h1>
+        
+        <form id="contact_form" onsubmit="submit_email(event)">
+            <div class="w-full flex justify-center mt-8">
+                <div class="font-roboto">
+                    <div class="flex space-x-10">
+                        <input required type="text" id="name" placeholder="Name" class="w-56 h-10 border-b-2 border-b-gray-400 focus:outline-none focus:ring-0 focus:border-b-sky-600">
+                        <input required type="email" id="email" placeholder="Email" class="w-56 h-10 border-b-2 border-b-gray-400 focus:outline-none focus:ring-0 focus:border-b-sky-600">
+                    </div>
+
+                    <textarea required id="message" placeholder="Message" class="w-full mt-10 min-h-[40px] h-auto border-b-2 border-b-gray-400 focus:outline-none focus:ring-0 focus:border-b-sky-600 resize-none overflow-hidden" oninput="adjustHeight(this)"></textarea>
+
+                    <div class="w-full flex justify-center mt-8">
+                        <button type="submit" class="px-10 text-white py-2.5 bg-slate-950 text-lg font-oswald font-bold rounded-lg">Submit <i class="fas fa-paper-plane ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--loadign-->
+    <div id="loading_screen" class="w-full h-full fixed top-0 z-50 left-0 flex hidden flex-col justify-center">
+        <div class="flex justify-center">
+            <div class="flex bg-white px-10 py-2 border rounded-2xl shadow-lg">
+                <div class="animate-pulse-scale">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div class=" flex flex-col h-full justify-center">
+                    <div class="text-sky-500 text-xl font-semibold tracking-wide animate-dots font-roboto">
+                        Sending
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Success modal-->
+    <div id="success_modal" class="w-full h-full fixed  top-0 z-50 left-0 flex hidden flex-col justify-center">
+        <div class="flex justify-center">
+            <div class="flex bg-white px-10 py-8 border rounded-2xl shadow-lg font-roboto relative">
+                <a onclick="close_success_modal()" class="text-lg font-bold absolute top-3 right-3 text-gray-600 cursor-pointer">X</a>
+                <div>
+                    <div class="w-full flex justify-center">
+                        <i class="fa fa-circle-check text-center text-6xl mb-6 text-emerald-500"></i>
+                    </div>
+                    <h1 class="text-center mb-4 font-roboto text-2xl">Thank you for reaching out!</h1>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="{% static 'js/app.js' %}"></script>
