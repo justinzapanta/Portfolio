@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.links),
     path('ticket', views.ticket),
     path('ticket/<str:id>', views.update_ticket),
+    path('agent', views.agent)
 ]

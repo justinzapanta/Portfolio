@@ -308,11 +308,13 @@ function show_putModal(){
 }
 
 function enter_id(){
-    endpoint = backup_enpoint
-    const id = input_id.value
-    endpoint = endpoint.split('{id}')[0] + id
-    display_url.textContent = endpoint
-    close_putModal()
+    if (input_id.value !== ''){
+        endpoint = backup_enpoint
+        const id = input_id.value
+        endpoint = endpoint.split('{id}')[0] + id
+        display_url.textContent = endpoint
+        close_putModal()
+    }
 }
 
 
@@ -356,12 +358,24 @@ function on_type(this_){
 
 function hide_button(method){
     if (method === 'GET:'){
+        display_method.classList.remove('text-emerald-600')
+        display_method.classList.remove('text-blue-500')
+        display_method.classList.remove('text-yellow-500')
+        display_method.classList.remove('text-red-500')
+
+        display_method.classList.add('text-emerald-600')
         body_button.classList.add('hidden')
         params_button.classList.remove('hidden')
         response_button.classList.remove('hidden')
         change_id_button.classList.add('hidden')
         input_id.value = ''
     }else if (method === 'POST:'){
+        display_method.classList.remove('text-emerald-600')
+        display_method.classList.remove('text-blue-500')
+        display_method.classList.remove('text-yellow-500')
+        display_method.classList.remove('text-red-500')
+
+        display_method.classList.add('text-blue-500')
         body_button.classList.remove('hidden')
         params_button.classList.add('hidden')
         response_button.classList.remove('hidden')
@@ -369,12 +383,24 @@ function hide_button(method){
         input_id.value = ''
 
     }else if (method === 'PUT:'){
+        display_method.classList.remove('text-emerald-600')
+        display_method.classList.remove('text-blue-500')
+        display_method.classList.remove('text-yellow-500')
+        display_method.classList.remove('text-red-500')
+
+        display_method.classList.add('text-yellow-500')
         show_putModal()
         body_button.classList.remove('hidden')
         params_button.classList.add('hidden')
         response_button.classList.remove('hidden')
         change_id_button.classList.remove('hidden')
     }else if (method === 'DELETE:'){
+        display_method.classList.remove('text-emerald-600')
+        display_method.classList.remove('text-blue-500')
+        display_method.classList.remove('text-yellow-500')
+        display_method.classList.remove('text-red-500')
+
+        display_method.classList.add('text-red-500')
         show_putModal()
         body_button.classList.add('hidden')
         params_button.classList.add('hidden')

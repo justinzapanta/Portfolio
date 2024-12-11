@@ -148,3 +148,9 @@ def update_ticket(request, id):
             return Response({"result" : 'Deleted Successfully'})
         except:
             return Response({"result" : 'Ensure the ID is correct'})
+        
+
+
+@api_view(['GET', 'POST'])
+def agent(request):
+    pass
