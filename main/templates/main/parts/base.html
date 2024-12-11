@@ -221,6 +221,11 @@
                             <h1 id="h1-2" class="text-emerald-600 text-sm font-bold">PUT:</h1>
                             <h1 id="h2-2" class="flex-1 ml-3 text-sm font-roboto">/api/ticket/{id}</h1>
                         </div>
+
+                        <div onclick="selected(this)" index="3" class="w-full flex py-1.5 hover:cursor-pointer font-roboto hover:bg-gray-100 px-3 rounded-md options">
+                            <h1 id="h1-3" class="text-emerald-600 text-sm font-bold">DELETE:</h1>
+                            <h1 id="h2-3" class="flex-1 ml-3 text-sm font-roboto">/api/ticket/{id}</h1>
+                        </div>
                     </div>
 
                     <!--Menu-->
@@ -228,6 +233,8 @@
                         <h1 onclick="show_response(this)" id="response_button" class="text-sm font-roboto hover:cursor-pointer font-bold hover:underline hover:underline-offset-2">Response</h1>
                         <a onclick="show_params(this)" id="params_button" class="text-sm hover:cursor-pointer hover:underline hover:underline-offset-2">Params</a>
                         <a onclick="show_body(this)" id="body_button" class="text-sm hover:cursor-pointer hover:underline hover:underline-offset-2">Body</a>
+                        
+                        <a onclick="show_putModal()" id="change_id_button" class="text-sm hover:cursor-pointer hover:underline hover:underline-offset-2">Change ID</a>
                     </div>
 
                     <!--params body-->

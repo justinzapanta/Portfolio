@@ -10,11 +10,9 @@ def links(request):
     return Response({
         'Links' : {
             'GET/POST' : '/api/ticket',
-            'PUT' : '/api/ticket/{id}'
+            'PUT' : '/api/ticket/{id}',
+            'DELETE' : '/api/ticket/{id}'
         },
-        'params' : {
-            '/api/ticket' : 'ticket_number, ticket_id, ticket_issue'
-        }
     })
 
 
@@ -106,41 +104,47 @@ def ticket(request):
     return Response({"result" : 'Something Wrong'})
 
 
-@api_view(['PUT'])
+@api_view(['PUT', 'DELETE'])
 def update_ticket(request, id):
-    try:
-        ticket = Ticket.objects.get(id = id)
-        data = request.data
+    if request.method == 'PUT':
+        try:
+            ticket = Ticket.objects.get(id = id)
+            data = request.data
 
-        if data.get('id'):
-            ticket.id = data['id']
+            if data.get('id'):
+                ticket.id = data['id']
 
-        if data.get('status'):
-            ticket.status = data['status']
+            if data.get('status'):
+                ticket.status = data['status']
 
-        if data.get('issue'):
-            ticket.issue = data['issue']
-        
-        if data.get('dateCreated'):
-            ticket.dateCreated = data['dateCreated']
+            if data.get('issue'):
+                ticket.issue = data['issue']
+            
+            if data.get('dateCreated'):
+                ticket.dateCreated = data['dateCreated']
 
-        if data.get('close'):
-            ticket.close = data['close']
+            if data.get('close'):
+                ticket.close = data['close']
 
-        if data.get('user_fullName'):
-            ticket.user_fullName = data['user_fullName']
+            if data.get('user_fullName'):
+                ticket.user_fullName = data['user_fullName']
 
-        if data.get('user_email'):
-            ticket.user_email = data['user_email']
+            if data.get('user_email'):
+                ticket.user_email = data['user_email']
 
-        if data.get('user_contactNumber'):
-            ticket.user_contactNumber = data['user_contactNumber']
-        ticket.save()
-        
-        update = TicketSerializer(ticket, many=False)
+            if data.get('user_contactNumber'):
+                ticket.user_contactNumber = data['user_contactNumber']
+            ticket.save()
+            
+            update = TicketSerializer(ticket, many=False)
 
-        return Response({"result" : update.data})
-    except:
-        return Response({"result" : 'Something Wrong'})
-
-
+            return Response({"result" : update.data})
+        except:
+            return Response({"result" : 'Something Wrong'})
+    else:
+        try:
+            ticket = Ticket.objects.get(id = id)
+            ticket.delete()
+            return Response({"result" : 'Deleted Successfully'})
+        except:
+            return Response({"result" : 'Ensure the ID is correct'})

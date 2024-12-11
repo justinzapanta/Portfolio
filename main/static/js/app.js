@@ -21,6 +21,7 @@ const body_guide = document.querySelector('#body_guide')
 let endpoint = '/api/ticket'
 let backup_enpoint = '/api/ticket'
 let request_methond = 'GET:'
+let id_url = false
 
 const options = document.querySelectorAll('.options')
 function selected(this_){
@@ -50,7 +51,7 @@ function selected(this_){
     hide_button(method.textContent)
     body_textrea.value = ''
     body_textrea.classList.replace('border-red-500', 'border-gray-400')
-
+    id_url = false
     if (request_methond === 'POST:'){
         body_guide.textContent = 'Create'
     }else{
@@ -67,7 +68,7 @@ async function send_request(){
     clean = clean[0]
     let response
 
-    if (clean === 'GET'){
+    if (clean === 'GET' || clean === "DELETE"){
         response = await fetch(endpoint, {
             method : clean,
             headers : {'Content-Type' : 'application/json'},
@@ -75,8 +76,14 @@ async function send_request(){
 
     }else if (clean === 'POST' || clean === 'PUT'){
         if (body_textrea.value !== ''){
-            textarea_json = JSON.parse(body_textrea.value)
-            submit_request = true
+            try {
+                textarea_json = JSON.parse(body_textrea.value)
+                submit_request = true
+            }catch{
+                body_textrea.classList.add('border-red-500')
+                submit_request = false
+            }
+
 
             for (field in textarea_json){
                 if (textarea_json[field] === 'Change the value'){
@@ -91,7 +98,7 @@ async function send_request(){
                     body : JSON.stringify(textarea_json)
                 })
             }else{
-                console.log('not send')
+                show_body()
                 body_textrea.classList.add('border-red-500')
             }
         }else{
@@ -136,11 +143,13 @@ async function send_request(){
     }
 
     //result
-    if (clean === 'POST' || clean === 'PUT'){
+    if (clean === 'POST' || clean === 'PUT' || clean === 'DELETE'){ //change delete later
         if (clean === 'PUT'){
             text = 'Updated\n{'
-        }else{
+        }else if (clean === 'POST'){
             text = 'Created\n{'
+        }else{
+            text = '\n{'
         }
 
         result = JSON.stringify(response_json.result)
@@ -168,6 +177,7 @@ const params_property = document.querySelector('#params_property')
 const response_button = document.querySelector('#response_button')
 const params_button = document.querySelector('#params_button')
 const body_button = document.querySelector('#body_button')
+const change_id_button = document.querySelector('#change_id_button')
 const response_body = document.querySelector('#response_body')
 const params_body = document.querySelector('#params_body')
 const body_body = document.querySelector('#body_body')
@@ -230,9 +240,10 @@ function show_response(){
     response_body.classList.remove('hidden')
     if (request_methond !== 'PUT:'){
         display_url.textContent = backup_enpoint
+        endpoint = backup_enpoint
     }
     params_object = {}
-    endpoint = backup_enpoint
+
 }
 
 function show_body(){
@@ -262,6 +273,25 @@ function show_body(){
         })
         text += '\n}'
         body_textrea.value = text
+    }else if (request_methond === 'PUT:'){
+        const fields = ["status", "user_fullName", "user_email", "user_contactNumber", "issue"]
+        const comments = [
+            'The status of the ticket. Possible values: "open", "in progress", "closed"',
+            'The full name of the user associated with the ticket. Example: "Carl Justin Zapanta"',
+            'The email address of the user. Example: "justin@example.com"',
+            'The contact number of the user. Example: "095374234531"',
+            'A brief description of the issue related to the ticket. Example: "Slow Internet Connection"'
+        ]
+
+        text = `Example:\n{\n\t"user_fullName" : "Carl Justin Zapanta"\n} \n\nAvailable Fields:`
+        
+        let index = 0
+        fields.forEach(field => {
+            text += '\n - ' + field +': ' + comments[index]
+            index += 1
+        })
+        body_textrea.placeholder = text
+
     }
     params_object = {}
 }
@@ -329,15 +359,27 @@ function hide_button(method){
         body_button.classList.add('hidden')
         params_button.classList.remove('hidden')
         response_button.classList.remove('hidden')
+        change_id_button.classList.add('hidden')
+        input_id.value = ''
     }else if (method === 'POST:'){
         body_button.classList.remove('hidden')
         params_button.classList.add('hidden')
         response_button.classList.remove('hidden')
+        change_id_button.classList.add('hidden')
+        input_id.value = ''
+
     }else if (method === 'PUT:'){
         show_putModal()
         body_button.classList.remove('hidden')
         params_button.classList.add('hidden')
         response_button.classList.remove('hidden')
+        change_id_button.classList.remove('hidden')
+    }else if (method === 'DELETE:'){
+        show_putModal()
+        body_button.classList.add('hidden')
+        params_button.classList.add('hidden')
+        response_button.classList.remove('hidden')
+        change_id_button.classList.remove('hidden')
     }
 }
 
