@@ -2,14 +2,14 @@
     "version": 2,
     "builds": [
       {
-        "src": "manage.py",
+        "src": "portfolio/wsgi.py",
         "use": "@vercel/python"
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "manage.py"
+        "dest": "portfolio/wsgi.py"
       }
     ],
     "installCommand": "pip install -r requirements.txt",
