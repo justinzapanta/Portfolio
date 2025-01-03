@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-4x37=2@6@)#el&)!^f@mt^4sq1fg55re7#6z!%3b69rgh)55xj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.0.114', '127.0.0.1']
+ALLOWED_HOSTS = ['portfolio-gvu4.onrender.com', 'justin.zapanta.io', 'localhost', '127.0.0.1']
 
 
 # Application definition
