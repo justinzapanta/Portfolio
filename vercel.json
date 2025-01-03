@@ -1,15 +1,18 @@
 {
     "version": 2,
     "builds": [
-    {
+      {
         "src": "manage.py",
         "use": "@vercel/python"
-    }
+      }
     ],
     "routes": [
-    {
+      {
         "src": "/(.*)",
-        "dest": "/portfolio/wsgi.py"
-    }
-    ]
-}
+        "dest": "manage.py"
+      }
+    ],
+    "installCommand": "pip install -r requirements.txt",
+    "buildCommand": "python manage.py migrate && python manage.py collectstatic --noinput",
+    "outputDirectory": "."
+  }
